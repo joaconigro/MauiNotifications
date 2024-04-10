@@ -1,5 +1,4 @@
-﻿using ABI.Windows.UI.Notifications;
-using MauiNotifications.Services;
+﻿using MauiNotifications.Services;
 
 namespace MauiNotifications
 {
