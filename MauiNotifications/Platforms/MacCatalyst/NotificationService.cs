@@ -10,32 +10,27 @@ namespace MauiNotifications.Services
 {
     public partial class NotificationService
     {
-        public partial void ShowNotification(string title, string message)
+        public partial async Task ShowNotification(string title, string message)
         {
-            UNUserNotificationCenter.Current.RequestAuthorization(UNAuthorizationOptions.Alert | UNAuthorizationOptions.Badge, (b, error) =>
+            var (auth, error) = await UNUserNotificationCenter.Current.RequestAuthorizationAsync(UNAuthorizationOptions.Alert);
+            if (!auth || error != null)
             {
-                if (error != null)
-                {
-                    Console.WriteLine(error);
-                }
-            });
+                Console.WriteLine(error);
+            }
+
+            var settings = await UNUserNotificationCenter.Current.GetNotificationSettingsAsync();
+            int timeout = settings.AlertStyle == UNAlertStyle.Alert ? 1 : 5;
 
             UNMutableNotificationContent content = new()
             {
                 Title = title,
-                Body = message
+                Body = message,
             };
 
-            UNTimeIntervalNotificationTrigger trigger = UNTimeIntervalNotificationTrigger.CreateTrigger(5, false);
-            UNNotificationRequest request = UNNotificationRequest.FromIdentifier("ALERT_REQUEST", content, trigger);
+            UNTimeIntervalNotificationTrigger trigger = UNTimeIntervalNotificationTrigger.CreateTrigger(timeout, false);
+            UNNotificationRequest request = UNNotificationRequest.FromIdentifier("com.fidelity.atp", content, trigger);
 
-            UNUserNotificationCenter.Current.AddNotificationRequest(request, (error) =>
-            {
-                if (error != null)
-                {
-                    Console.WriteLine(error);
-                }
-            });
+            await UNUserNotificationCenter.Current.AddNotificationRequestAsync(request);
         }
     }
 }

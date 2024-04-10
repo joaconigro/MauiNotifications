@@ -8,11 +8,11 @@ using Windows.UI.Notifications;
 
 namespace MauiNotifications.Services
 {
-    public partial class NotificationService
+  public partial class NotificationService
+  {
+    public partial async Task ShowNotification(string title, string message)
     {
-        public partial void ShowNotification(string title, string message)
-        {
-            string xmlContent = @$"<toast launch=""readMoreArg"">
+      string xmlContent = @$"<toast launch=""readMoreArg"">
                                       <visual>
                                         <binding template=""ToastGeneric"">
                                           <text>{title}</text>
@@ -21,13 +21,14 @@ namespace MauiNotifications.Services
                                       </visual>
                                     </toast>
                                  ";
-            XmlDocument doc = new();
-            doc.LoadXml(xmlContent);
+      XmlDocument doc = new();
+      doc.LoadXml(xmlContent);
 
-            ToastNotification toast = new(doc);
+      ToastNotification toast = new(doc);
 
-            // Show the toast notification
-            ToastNotificationManager.CreateToastNotifier().Show(toast);
-        }
+      // Show the toast notification
+      ToastNotificationManager.CreateToastNotifier().Show(toast);
+      await Task.CompletedTask;
     }
+  }
 }

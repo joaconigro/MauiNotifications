@@ -8,6 +8,6 @@ namespace MauiNotifications.Services
 {
     public partial class NotificationService
     {
-        public partial void ShowNotification(string title, string message);
+        public partial Task ShowNotification(string title, string message);
     }
 }
