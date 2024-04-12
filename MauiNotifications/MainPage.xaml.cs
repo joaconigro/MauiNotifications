@@ -13,7 +13,13 @@ namespace MauiNotifications
 
         private void OnCounterClicked(object sender, EventArgs e)
         {
+#if WINDOWS
             _notificationService.ShowNotification("this is a test message");
+
+#elif MACCATALYST
+            _notificationService.ShowNotificationMac("ATP", "this is a test message");
+
+#endif
         }
     }
 
